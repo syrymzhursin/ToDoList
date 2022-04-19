@@ -27,8 +27,8 @@ var toDoList: [[String: Any]]  {
     }
 }
 
-func addItem(nameItem: String, isCompleted: Bool = false) {
-    toDoList.append(["Name": nameItem, "isCompleted": false])
+func addItem(nameItem: String, dateItem: String, isCompleted: Bool = false) {
+    toDoList.append(["Name": nameItem, "Date": dateItem, "isCompleted": false])
     setBadges()
     
 }
@@ -36,7 +36,6 @@ func addItem(nameItem: String, isCompleted: Bool = false) {
 func removeItem(at index: Int) {
     toDoList.remove(at: index)
     setBadges()
-    
 }
 
 func changeState(at item: Int) -> Bool {

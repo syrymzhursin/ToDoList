@@ -22,18 +22,20 @@ class TableViewController: UITableViewController {
         let alertController = UIAlertController(title: "Create new item", message: nil, preferredStyle: .alert)
         
         alertController.addTextField { (textField) in
-            textField.placeholder = "New item name"
+            textField.placeholder = "Add Task"
+        }
+        alertController.addTextField { (textField) in
+            textField.placeholder = "Add Day & Time"
         }
         let alertAction1 = UIAlertAction(title: "Cancel", style: .cancel) { (alert) in
             
         }
         
         let alertAction2 = UIAlertAction(title: "Create", style: .default) { (alert) in
-            let newItem = alertController.textFields![0].text
-            if newItem != "" {
-            addItem(nameItem: newItem!)
+            let newTask = alertController.textFields?[0].text ?? ""
+            let newDate = alertController.textFields?[1].text ?? ""
+            addItem(nameItem: newTask, dateItem: newDate)
             self.tableView.reloadData()
-            }
         }
         
         
@@ -47,33 +49,25 @@ class TableViewController: UITableViewController {
         
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = UIColor.secondarySystemBackground
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return toDoList.count
     }
 
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
         let currentItem = toDoList[indexPath.row]
 
         cell.textLabel?.text = currentItem["Name"] as? String
+        cell.detailTextLabel?.text = currentItem["Date"] as? String
         
         if (currentItem["isCompleted"] as? Bool) == true {
             cell.imageView?.image = UIImage(named: "checkCompleted")
@@ -98,29 +92,17 @@ class TableViewController: UITableViewController {
         return cell
     }
     
-   
-    
-    
-
-    
-    // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
         return true
     }
     
-
-    
-    // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            // Delete the row from the data source
             removeItem(at: indexPath.row)
-
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+
+        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -136,8 +118,6 @@ class TableViewController: UITableViewController {
         }
     }
 
-    
-    // Override to support rearranging the table view.
     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
        
         moveItem(fromIndex: fromIndexPath.row, toIndex: to.row)
@@ -158,23 +138,4 @@ class TableViewController: UITableViewController {
         return false
     }
     
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
